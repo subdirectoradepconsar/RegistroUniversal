@@ -1,0 +1,59 @@
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.glass-card {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-input {
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.25s ease;
+}
+
+.glass-input:focus-within,
+.glass-input.has-error {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: #0d9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.25);
+}
+
+.glass-input.has-error {
+  border-color: #fb7185;
+  box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.2);
+}
+
+.field-label {
+  display: block;
+  margin: 0 0 0.375rem 0.25rem;
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.field-label > span { color: #2dd4bf; }
+
+.field-control {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  color: #f1f5f9;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 0.875rem;
+}
+
+select.field-control option { background: #0f172a; color: #f1f5f9; }
+.field-error { margin: 0.25rem 0 0 0.25rem; color: #fb7185; font-size: 0.75rem; }
+
+.checkmark-path { stroke-dasharray: 50; stroke-dashoffset: 50; animation: drawCheck .6s cubic-bezier(.65,0,.45,1) .2s forwards; }
+@keyframes drawCheck { to { stroke-dashoffset: 0; } }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
