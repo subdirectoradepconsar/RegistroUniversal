@@ -1,5 +1,25 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx36YGmJroYmD9dcD3ooVFadMPHViMq_ZrWJQ2jGlRQpIrYa844V75ALPLlrHG_EIqw/exec";
 
+let registroEnCurso = false;
+
+async function registrarParticipante(datos) {
+  if (registroEnCurso) throw new Error("Ya hay un envío en curso.");
+  registroEnCurso = true;
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(datos),
+      redirect: "follow"
+    });
+    // La respuesta opaca no permite confirmar el guardado ni leer el JSON.
+    return { status: "unconfirmed" };
+  } finally {
+    registroEnCurso = false;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("attendance-form");
   const formContainer = document.getElementById("form-container");
@@ -33,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (submitBtn.disabled) return;
     submitError.classList.add("hidden");
     if (!validateForm()) return;
 
@@ -52,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setLoading(true);
     try {
-      await sendRegistration(payload);
+      await registrarParticipante(payload);
       showSuccess(payload);
     } catch (error) {
       console.error("No se pudo enviar el registro:", error);
@@ -104,28 +125,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setLoading(isLoading) {
     submitBtn.disabled = isLoading;
+    form.setAttribute("aria-busy", String(isLoading));
     btnText.classList.toggle("hidden", isLoading);
     btnSpinner.classList.toggle("hidden", !isLoading);
-  }
-
-  async function sendRegistration(payload) {
-    if (typeof google !== "undefined" && google.script?.run) {
-      return new Promise((resolve, reject) => {
-        google.script.run
-          .withSuccessHandler(resolve)
-          .withFailureHandler(reject)
-          .doPost(payload);
-      });
-    }
-
-    const response = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload),
-      redirect: "follow"
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response;
   }
 
   function showSuccess(payload) {
