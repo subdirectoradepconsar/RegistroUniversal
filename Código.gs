@@ -31,11 +31,21 @@ function doPost(e) {
     if (anio < 1920 || anio > Number(Utilities.formatDate(ahora, zona, "yyyy"))) {
       throw new Error("Año de nacimiento fuera de rango.");
     }
-    const hoja = libro.getActiveSheet();
-    if (!hoja) throw new Error("No se encontró la hoja activa.");
+    const area = normalizarArea_(datos.organizacion);
+    const areas = { cochi1: "Cochi 1", cochi2: "Cochi 2", stand: "Stand", auditorio: "Auditorio" };
+    if (!Object.prototype.hasOwnProperty.call(areas, area)) {
+      throw new Error("Área inválida. Selecciona Cochi 1, Cochi 2, Stand o Auditorio.");
+    }
+    const hojas = libro.getSheets().filter(function (hoja) {
+      return normalizarArea_(hoja.getName()) === area;
+    });
+    if (hojas.length !== 1) {
+      throw new Error("Debe existir exactamente una hoja para el área " + areas[area] + ".");
+    }
+    const hoja = hojas[0];
     hoja.appendRow([
       Utilities.formatDate(ahora, zona, "yyyy-MM-dd HH:mm:ss"),
-      textoSeguro_(datos.organizacion),
+      areas[area],
       textoSeguro_(datos.nombre),
       textoSeguro_(datos.correo),
       anio,
@@ -45,6 +55,11 @@ function doPost(e) {
   } catch (error) {
     return respuestaJSON_({ status: "error", message: error.message || String(error) });
   }
+}
+
+// Permite nombres como "Cochi1", "cochi 1" o "COCHI 1".
+function normalizarArea_(texto) {
+  return texto.toLowerCase().replace(/\s+/g, "");
 }
 
 function respuestaJSON_(datos) {

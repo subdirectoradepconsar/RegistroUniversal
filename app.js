@@ -1,4 +1,4 @@
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx36YGmJroYmD9dcD3ooVFadMPHViMq_ZrWJQ2jGlRQpIrYa844V75ALPLlrHG_EIqw/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGoeg0HeQzTWcc9NfIXbsixYa_Yt66E16JauFhLB_40a3QiAc0iEM5kuuRO4NGGcWR/exec";
 
 let registroEnCurso = false;
 

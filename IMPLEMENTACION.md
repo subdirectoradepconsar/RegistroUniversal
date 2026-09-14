@@ -1,11 +1,11 @@
 # Registro Universal: implementación
 
-1. Abre el archivo de Google Sheets **Registro Universal**. En la pestaña de destino coloca en A1:F1: **Fecha y Hora | Organización | Nombre | Correo | Año de nacimiento | Género**. Déjala activa: el script utiliza `getActiveSheet()`. Para fijar una pestaña permanentemente puedes sustituirlo por `getSheetByName("Nombre de pestaña")`.
+1. Abre el archivo de Google Sheets **Registro Universal**. Prepara cuatro pestañas: **Cochi 1**, **Cochi 2**, **Stand** y **Auditorio**, en ese orden. En cada una coloca en A1:F1: **Fecha y Hora | Área | Nombre | Correo | Año de nacimiento | Género**. El registro se guarda únicamente en la pestaña del área elegida, buscando por nombre; la pestaña activa y los cambios de orden no afectan el destino. Se aceptan mayúsculas/minúsculas y espacios (por ejemplo, `cochi1` o `Cochi 1`). Si falta la hoja o hay dos nombres equivalentes, se rechaza el registro sin escribir en otra pestaña. Los registros anteriores no se mueven automáticamente.
 2. Configura la zona horaria local en **Archivo → Configuración** de Google Sheets. El script la utiliza para la fecha `yyyy-MM-dd HH:mm:ss`.
 3. Abre **Extensiones → Apps Script**, copia el contenido completo de `Código.gs` y sustituye `SPREADSHEET_ID` por el ID de este archivo (segmento entre `/d/` y `/edit` de su URL). Se abre por ID porque una Web App no dispone del contexto activo de la interfaz de Sheets.
 4. Selecciona **Implementar → Nueva implementación → Aplicación web**. Configura **Ejecutar como: Yo** y **Quién tiene acceso: Cualquier persona**. Autoriza los permisos solicitados y copia la URL terminada en `/exec`.
 5. Sustituye `APPS_SCRIPT_URL` al inicio de `app.js` por esa URL. El formulario ya invoca `registrarParticipante(datos)` y deshabilita el botón con un indicador durante el envío. Al actualizar un despliegue existente, publica una nueva versión desde **Gestionar implementaciones**.
-6. Envía un registro de prueba desde la web y comprueba directamente que aparece una fila en A:F. Revisa **Ejecuciones** en Apps Script si no aparece. No ejecutes `doPost` directamente desde el editor sin un evento de prueba.
+6. Envía un registro de prueba por cada área desde la web y comprueba directamente que aparece una fila en A:F únicamente en su pestaña correspondiente. Mantén otra pestaña activa durante la prueba para comprobar que no afecta el destino. Revisa **Ejecuciones** en Apps Script si no aparece. No ejecutes `doPost` directamente desde el editor sin un evento de prueba.
 
 ## Respuestas y CORS
 
